@@ -1,0 +1,75 @@
+.contenedor{
+    margin-right: 30%;
+    margin-left: 30%;
+}
+
+.text{
+    font-size:20px;
+}
+
+.act{
+    text-align: center;
+}
+
+.abs-center {
+    // display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 33%;
+    margin-right: 33%;
+    min-height: 50vh;
+  }
+
+.btn-send{
+    display: flex;
+    justify-content: center;
+}
+
+.outline-form{
+    padding: 10px;
+    outline: 2px solid rgb(59, 59, 59);
+    border-radius: 1%;
+    background-color: white;
+}
+
+.edit{
+    margin-top: 20px;
+}
+
+h1{
+    text-align: center;
+}
+
+.form-control{
+    color: white;
+}
+.num{
+    width: 50px;
+}
+.nem{
+    width: 250px;
+}
+.act{
+    width: 100px;
+}
+
+.filtro{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-top: 5%;
+    margin-bottom: 20px;
+}
+
+.actions{
+    text-align: center;
+}
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
