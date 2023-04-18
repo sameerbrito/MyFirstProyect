@@ -23,7 +23,7 @@ class MyFirstController extends Controller
 
         $data = MyFirstModel::where('name','LIKE','%'.$search.'%')
                             ->orwhere('last_name','LIKE','%'.$search.'%')   
-                            ->paginate(10);
+                            ->paginate(5);
 
                             
         return view('crud.index', ['test' => $data, 'search' => $search]);
