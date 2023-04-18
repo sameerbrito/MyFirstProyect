@@ -8,19 +8,22 @@
         </div>
     @endif
     <div class="contenedor">
-        <div class="div-search">                
-            <form action="{{route('crud.index')}}" method="GET" class="d-flex filtro">
-                <input class="form-control w-25 me-2" name="Search" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success w-10 h-25" type="submit">Search</button>
-            </form>
+        <div id=Left>
+            <a href="{{route('crud.create')}}"><button class="btn btn-success"><i class="bi bi-plus-square"></i> Crear</button></a>
+        </div>
+        <div id=Right>            
+        <form action="{{route('crud.index')}}" method="GET" class="d-flex">
+            <input class="form-control me-2" name="Search" type="text" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
         </div>
         <table class="table table-hover">
             <thead>
                 <tr class="text">
                     <th class="num">#</th>
-                    <th class="nem">Name</th>
-                    <th class="nem">Last Name</th>
-                    <th class="act" colspan="2">Acciones</th>
+                    <th class="nem">Nombre</th>
+                    <th class="nem">Apellido</th>
+                    <th style="text-align: center" colspan="2">Acciones</th>
                 </tr>
             </thead>
             @foreach ($test as $person)
@@ -40,7 +43,7 @@
                         <form action="{{route('crud.destroy', $person)}}" method="POST">
                             @csrf 
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Quieres ELIMINAR los datos del estudiante?')"><i class="bi bi-trash2-fill"></i> Borrar</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Quieres ELIMINAR los datos del estudiante?')"><i class="bi bi-trash"></i> Borrar</button>
                         </form>
                     </td>
                 </tr>
@@ -51,5 +54,4 @@
             {{$test->appends(['search'=>$search])}}
         </div>
     </div>
-    <div class="btn-send"><a href="{{route('crud.create')}}"><button class="btn btn-success"><i class="bi bi-file-earmark-plus-fill"></i> Crear</button></a></div>
 @endsection

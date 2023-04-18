@@ -10,11 +10,6 @@ use Illuminate\View\View;
 
 class MyFirstController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
 
@@ -34,22 +29,11 @@ class MyFirstController extends Controller
         // return response()->json($data,200,[]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create():view
     {
         return view('crud.create');
     }
 
-    /** 
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -62,23 +46,11 @@ class MyFirstController extends Controller
         return redirect()->route('crud.index')->with('success','Estudiante agregado exitosamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\MyFirstModel  $myFirstModel
-     * @return \Illuminate\Http\Response
-     */
     public function show(MyFirstModel $myFirstModel)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\MyFirstModel  $myFirstModel
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 
@@ -90,13 +62,6 @@ class MyFirstController extends Controller
         return view('crud.edit', ['test' => $person]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MyFirstModel  $myFirstModel
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $myFirstModel = MyFirstModel::all();
@@ -107,12 +72,6 @@ class MyFirstController extends Controller
         return redirect()->route('crud.index')->with('success','Datos del estudiante: '.$person->name.' editados correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\MyFirstModel  $myFirstModel
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $myFirstModel = MyFirstModel::all();
