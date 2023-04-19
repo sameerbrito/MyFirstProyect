@@ -69,7 +69,6 @@ h1{
     float:right;
     margin-bottom: 20px;
 }
-
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
@@ -78,3 +77,5 @@ h1{
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+@import "node_modules/font-awesome/scss/font-awesome.scss";

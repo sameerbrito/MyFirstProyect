@@ -10,8 +10,7 @@
     <title>@yield('title')</title>
 
     <!-- Scripts -->
-    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
-    <script src="js/app.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,7 +21,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    <div id="bar">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand">CRUD</a>
@@ -40,9 +39,9 @@
                   </ul>
             </div>
         </nav>
-        <main class="py-4">     
-            @yield('content')
-        </main>
+    </div>
+    <div id="app">
+        @yield('content')
     </div>
 </body>
 </html>
