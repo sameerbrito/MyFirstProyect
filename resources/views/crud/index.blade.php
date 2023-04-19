@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Home')
+@section('title','CRUD')
 
 @section('content')
     @if (Session::get('success'))
@@ -29,7 +29,7 @@
             @foreach ($test as $person)
             <tbody>
                 <tr>
-                    <td>{{$person->id}}{{--{{$loop->iteration}}--}}</td>
+                    <td>{{$person->id}}</td>
                     <td>{{$person->name}}</td>
                     <td>{{$person->last_name}}</td>
                     <td class="actions">
@@ -54,4 +54,5 @@
             {{$test->appends(['search'=>$search])}}
         </div>
     </div>
+    <example-component></example-component>
 @endsection
