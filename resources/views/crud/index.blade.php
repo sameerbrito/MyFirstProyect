@@ -2,7 +2,7 @@
 @section('title','CRUD')
 
 @section('content')
-    @if (Session::get('success'))
+    {{-- @if (Session::get('success'))
         <div class="alert alert-success" role="alert">
             <strong>{{Session::get('success')}}</strong>
         </div>
@@ -53,6 +53,7 @@
         <div class="d-flex justify-content-end">
             {{$test->appends(['search'=>$search])}}
         </div>
-    </div>
+    </div> --}}
+    <list-component></list-component>
     <example-component></example-component>
 @endsection

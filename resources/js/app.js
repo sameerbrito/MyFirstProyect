@@ -21,7 +21,8 @@ window.axios = require('axios');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('login', require('./components/Login.vue').default);
+Vue.component('login-component', require('./components/Login.vue').default);
+Vue.component('list-component', require('./components/List.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

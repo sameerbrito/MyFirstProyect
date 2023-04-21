@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyFirstController;
 use App\Models\MyFirstModel;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +17,13 @@ use Illuminate\Routing\RouteGroup;
 |
 */
 
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('get-all-students', [MyFirstController::class, 'getAllStudents']);
 Route::resource('crud', MyFirstController::class);
 
 // Route::controller(MyFirstController::class)->group(function(){

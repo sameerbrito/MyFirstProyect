@@ -13,20 +13,27 @@ class MyFirstController extends Controller
     public function index(Request $request)
     {
 
-        $search = $request->Search;
-        //$data=MyFirstModel::paginate(5);
+        // $search = $request->Search;
+        // //$data=MyFirstModel::paginate(5);
 
-        $data = MyFirstModel::where('name','LIKE','%'.$search.'%')
-                            ->orwhere('last_name','LIKE','%'.$search.'%')   
-                            ->paginate(10);
+        // $data = MyFirstModel::where('name','LIKE','%'.$search.'%')
+        //                     ->orwhere('last_name','LIKE','%'.$search.'%')   
+        //                     ->paginate(7);
 
-                            
-        return view('crud.index', ['test' => $data, 'search' => $search]);
+        $students = MyFirstModel::get();              
+            
+        return view('crud.index', ['students' => $students]);
 
         // $test = MyFirstModel::all();
 
         // $data = ['success'=>true,'test'=>$test];
         // return response()->json($data,200,[]);
+    }
+
+    public function getAllStudents(Request $request){
+        return response()->json([
+            "students"=>MyFirstModel::get(),
+        ]);
     }
 
     public function create():view

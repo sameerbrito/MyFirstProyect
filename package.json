@@ -21,10 +21,12 @@
         "sass-loader": "^11.0.1",
         "vue": "^2.6.12",
         "vue-loader": "^15.9.8",
-        "vue-template-compiler": "^2.6.12"
+        "vue-template-compiler": "^2.6.12",
+        "vue2-laravel-pagination": "^1.0.5"
     },
     "dependencies": {
         "bootstrap-icons": "^1.10.4",
-        "font-awesome": "^4.7.0"
+        "font-awesome": "^4.7.0",
+        "vue-resource": "^1.5.3"
     }
 }
