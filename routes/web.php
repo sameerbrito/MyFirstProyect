@@ -32,7 +32,6 @@ Route::resource('crud', MyFirstController::class);
 //     Route::get('edit', 'edit');
 // });
 
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();

@@ -2,7 +2,8 @@
 @section('title','Editar')
 
 @section('content')
-    <div class="container edit">
+  <edit-component></edit-component>
+    {{-- <div class="container edit">
         <h1>Editar</h1>
         <div class="abs-center">
             <form class="outline-form" action="{{route('crud.update', $test)}}" method="POST" enctype="multipart/form-data"> 
@@ -25,5 +26,5 @@
                 <div class="btn-send"><button class="btn btn-primary btn-block mb-4"><i class="bi bi-download"></i> Guardar</button></div>
             </form>
         </div>
-    </div>
+    </div> --}}
 @endsection

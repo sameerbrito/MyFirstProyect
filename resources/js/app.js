@@ -23,6 +23,8 @@ window.axios = require('axios');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('login-component', require('./components/Login.vue').default);
 Vue.component('list-component', require('./components/List.vue').default);
+Vue.component('edit-component', require('./components/Edit.vue').default);
+Vue.component('create-component', require('./components/Create.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

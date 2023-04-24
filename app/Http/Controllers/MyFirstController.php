@@ -20,8 +20,9 @@ class MyFirstController extends Controller
         //                     ->orwhere('last_name','LIKE','%'.$search.'%')   
         //                     ->paginate(7);
 
-        $students = MyFirstModel::get();              
-            
+        $students = MyFirstModel::get();
+        // dd($students);
+        // return response()->json($students);
         return view('crud.index', ['students' => $students]);
 
         // $test = MyFirstModel::all();
@@ -32,7 +33,7 @@ class MyFirstController extends Controller
 
     public function getAllStudents(Request $request){
         return response()->json([
-            "students"=>MyFirstModel::get(),
+            "students"=>MyFirstModel::latest()->paginate(7),
         ]);
     }
 
@@ -43,14 +44,21 @@ class MyFirstController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'last_name' => 'required'
-        ]);
+
+
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        // $request->validate([
+        //     'name' => 'required',
+        //     'last_name' => 'required'
+        // ]);
 
         MyFirstModel::create($request->all());
 
-        return redirect()->route('crud.index')->with('success','Estudiante agregado exitosamente');
+        // return redirect()->route('crud.index')->with('success','Estudiante agregado exitosamente');
     }
 
     public function show(MyFirstModel $myFirstModel)
@@ -61,33 +69,30 @@ class MyFirstController extends Controller
     public function edit($id)
     {
 
-        $myFirstModel = MyFirstModel::all();
  
-        $person = $myFirstModel->find($id);
+        $student = MyFirstModel::find($id);
+
 
         //dd($person);
-        return view('crud.edit', ['test' => $person]);
+        return view('crud.edit', ['student' => $student]);
     }
 
     public function update(Request $request, $id)
     {
-        $myFirstModel = MyFirstModel::all();
+        $student = MyFirstModel::find($id);
 
-        $person = $myFirstModel->find($id);
+        $student->update($request->all());
 
-        $person->update($request->all());
-        return redirect()->route('crud.index')->with('success','Datos del estudiante: '.$person->name.' editados correctamente');
+        // return response()->json($student);
+        // return redirect()->route('crud.index')->with('success','Datos del estudiante: '.$person->name.' editados correctamente');
     }
 
     public function destroy($id)
     {
-        $myFirstModel = MyFirstModel::all();
- 
-        $person = $myFirstModel->find($id);
-
         //$myfirstmodel=MyFirstModel();
         //dd($person);
-
+        
+        $person = MyFirstModel::find($id);
         $person->delete();
         return redirect()->route('crud.index');
     }
