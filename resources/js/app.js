@@ -6,8 +6,11 @@
 
 require('./bootstrap');
 
+
+window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 window.Vue = require('vue').default;
 window.axios = require('axios');
+window.moment = require('moment');
 
 /**
  * The following block of code may be used to automatically register your
@@ -23,8 +26,6 @@ window.axios = require('axios');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('login-component', require('./components/Login.vue').default);
 Vue.component('list-component', require('./components/List.vue').default);
-Vue.component('edit-component', require('./components/Edit.vue').default);
-Vue.component('create-component', require('./components/Create.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

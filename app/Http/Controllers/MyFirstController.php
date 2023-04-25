@@ -45,16 +45,10 @@ class MyFirstController extends Controller
     public function store(Request $request)
     {
 
-
-        try {
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-        // $request->validate([
-        //     'name' => 'required',
-        //     'last_name' => 'required'
-        // ]);
+        $request->validate([
+            'name' => 'required',
+            'last_name' => 'required'
+        ]);
 
         MyFirstModel::create($request->all());
 
@@ -83,17 +77,16 @@ class MyFirstController extends Controller
 
         $student->update($request->all());
 
-        // return response()->json($student);
+        return response()->json($student);
         // return redirect()->route('crud.index')->with('success','Datos del estudiante: '.$person->name.' editados correctamente');
     }
 
     public function destroy($id)
     {
         //$myfirstmodel=MyFirstModel();
-        //dd($person);
-        
+        // dd($id);
         $person = MyFirstModel::find($id);
         $person->delete();
-        return redirect()->route('crud.index');
+        // return redirect()->route('crud.index');
     }
 }
