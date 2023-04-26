@@ -13,6 +13,6 @@ class TestSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\MyFirstModel::factory(50)->create();
+        \App\Models\MyFirstModel::factory(20)->create();
     }
 }

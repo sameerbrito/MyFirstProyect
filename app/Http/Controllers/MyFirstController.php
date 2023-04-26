@@ -37,6 +37,11 @@ class MyFirstController extends Controller
         ]);
     }
 
+    public function deleteSelectedStudents(Request $request){
+        MyFirstModel::destroy($request->all());
+        // dd($request->all());
+    }
+
     public function create():view
     {
         return view('crud.create');

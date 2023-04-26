@@ -6,8 +6,8 @@
 
 require('./bootstrap');
 
-
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
+window.Swal = require('sweetalert2');
 window.Vue = require('vue').default;
 window.axios = require('axios');
 window.moment = require('moment');

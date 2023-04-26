@@ -48,35 +48,57 @@
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
         </div>
-            <table class="table table-hover">
-                <thead>
-                    <tr class="text">
-                        <th class="num">#</th>
-                        <th class="nem">Nombre</th>
-                        <th class="nem">Apellido</th>
-                        <th style="text-align: center" colspan="2">Acciones</th>
-                    </tr>
-                </thead>
-                <!-- @foreach ($test as $person) -->
-                <tbody>
-                    <tr v-for="student,i in filteredStudents" :key="i">
-                        <td>{{ student.id }}</td>
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.last_name }}</td>
-                        <td class="actions">
-                            <button type="submit" class="btn btn-primary" @click="showModal(student.id), selectStudent(student)"><i class="bi bi-pencil-square"></i> Editar</button>
-                        </td>
-                        <td class="actions">
-                            <button type="submit" class="btn btn-outline-danger" @click="deleteStudent(student.id)" onclick="alert('deseas eliminarlo al estudiante')"><i class="bi bi-trash"></i> Borrar</button>
-                        </td>
-                    </tr>
-                </tbody>
-                <!-- @endforeach -->
-            </table>
-            <Pagination :current="paginate.current_page" :total="paginate.total" :per-page="paginate.per_page" @page-changed="getStudents">
-            </Pagination>
+        <table class="table table-hover">
+            <thead>
+                <tr class="text">
+                    <th class="num">#</th>
+                    <th class="nem">Nombre</th>
+                    <th class="nem">Apellido</th>
+                    <th style="text-align: center">
+                        <i class="bi bi-pencil-square"></i>
+                    </th>
+                    <th style="text-align: center">
+                        <div class="d-flex justify-content-center">
+                            <div class="form-check form-switch">
+                                <input @change="massiveDelete()" class="form-check-input" type="checkbox" id="massiveDeleteCheckBox">
+                            </div>
+                            <i v-if="!mass_delete" class="bi bi-x-square"></i>
+                            <a @click="confirmMessage()" style="color: red;" v-else><i class="bi bi-x-square"></i></a>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <!-- @foreach ($test as $person) -->
+            <tbody>
+                <tr v-for="student,i in filteredStudents" :key="i">
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.last_name }}</td>
+                    <td class="actions">
+                        <button type="submit" class="btn btn-primary" @click="showModal(student.id), selectStudent(student)"><i class="bi bi-pencil-square"></i> Editar</button>
+                    </td>
+                    <td class="actions" v-if="!mass_delete">
+                        <button type="submit" class="btn btn-outline-danger" @click="deleteStudent(student.id)" onclick="alert('deseas eliminarlo al estudiante')"><i class="bi bi-trash"></i> Borrar</button>
+                    </td>
+                    <td class="actions" v-else>
+                        <div>
+                            <input @click="deleteSelectedStudents(student)" style="
+                            width: 25px; 
+                            height: 25px;" class="form-check-input" type="checkbox" id="checkboxDelete" value="" aria-label="...">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <!-- @endforeach -->
+        </table>
+        <div class="d-flex justify-content-between">
+            <div>
+                <button type="button" class="btn btn-secondary" @click="mapStudent()"><i class="bi bi-person-vcard-fill"></i> map students</button>
+            </div>
+            <Pagination :current="paginate.current_page" :total="paginate.total" :per-page="paginate.per_page" @page-changed="getStudents"></Pagination>
         </div>
     </div>
+</div>
 </template>
 
 <!-- Scripts -->
@@ -89,7 +111,9 @@ export default {
     },
     data() {
         return {
-            modal_title: "",
+            checkedStudents: [],
+            mass_delete: null,
+            full_name: [],
             time: '',
             myModal: null,
             error: 0,
@@ -172,6 +196,48 @@ export default {
                 ...student
             }
         },
+        massiveDelete() {
+            this.mass_delete = document.getElementById('massiveDeleteCheckBox').checked
+        },
+        deleteSelectedStudents(student) {
+            this.checkedStudents.indexOf(student.id) == -1 ?
+                this.checkedStudents.push(student.id) :
+                this.checkedStudents.splice(this.checkedStudents.indexOf(student.id), 1)
+        },
+        confirmMessage() {
+            Swal.fire({
+                title: 'Estas seguro?',
+                text: "Los estudiantes se eliminaran permanentemente",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.deleteAllChecked()
+                }
+            })
+        },
+        deleteAllChecked() {
+            axios.delete('/delete-selected-students/',{params:
+                this.checkedStudents
+            })
+                .then(response => {
+                    console.log(response)
+                    this.cleanInputs()
+                    this.getStudents(1)
+                })
+                .catch(error => {
+                    console.error(error);
+                    this.getStudents(1)
+                })
+        },
+        mapStudent() {
+            this.full_name = this.students.map((stu) => {
+                return `${stu.name} ${stu.last_name}`
+            });
+        },
         showModal(student_id) {
             this.student_id = student_id
             this.myModal = new bootstrap.Modal(document.getElementById('theModal'))
@@ -184,9 +250,9 @@ export default {
             this.input_student.name = ""
             this.input_student.last_name = ""
         },
-        clock(){
-            setInterval(()=>{
-                this.time = moment().format('h:mm:ss a')
+        clock() {
+            setInterval(() => {
+                this.time = moment().format('HH:mm:ss')
             }, 1000)
 
         }
@@ -198,8 +264,7 @@ export default {
                 el.last_name.toLowerCase().includes(this.search.toLowerCase()));
         },
     },
-    watch: {
-    },
+    watch: {},
     mounted() {
         this.clock()
         this.getStudents()
@@ -210,5 +275,8 @@ export default {
 <!-- Style -->
 
 <style>
-
+.form-check-input:checked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
 </style>

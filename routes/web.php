@@ -24,6 +24,7 @@ Route::get('/', function () {
 });
 
 Route::get('get-all-students', [MyFirstController::class, 'getAllStudents']);
+Route::delete('delete-selected-students', [MyFirstController::class, 'deleteSelectedStudents']);
 Route::resource('crud', MyFirstController::class);
 
 // Route::controller(MyFirstController::class)->group(function(){
