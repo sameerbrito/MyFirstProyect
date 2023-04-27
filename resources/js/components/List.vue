@@ -14,21 +14,18 @@
                             <div class="col">
                                 <div class="form-outline">
                                     <label class="form-label" for="Nombre">Nombre</label>
-                                    <input class="form-control" type="text" required v-model="input_student.name">
+                                    <input class="form-control" type="text" v-model="input_student.name">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-outline">
                                     <label class="form-label" for="Apellido">Apellido</label>
-                                    <input class="form-control" type="text" required v-model="input_student.last_name">
+                                    <input class="form-control" type="text" v-model="input_student.last_name">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="alert alert-danger mh-50" role="alert" v-if="error != 0">
-                            Debes de completar todos los campos!
-                        </div>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="beforeClose">Close</button>
 
                         <button type="submit" class="btn btn-primary"><i class="bi bi-download"></i> Guardar</button>
@@ -37,6 +34,8 @@
             </div>
         </div>
     </div>
+
+    <!--Lista de estudiantes -->
     <div class="contenedor">
         <div class="d-flex justify-content-between">
             <button type="button" class="btn btn-success" @click="showModal()"><i class="bi bi-plus-square"></i>
@@ -54,47 +53,44 @@
                     <th class="num">#</th>
                     <th class="nem">Nombre</th>
                     <th class="nem">Apellido</th>
-                    <th style="text-align: center">
+                    <th></th>
+                    <th style="text-align: center; width: 100px;">
                         <i class="bi bi-pencil-square"></i>
                     </th>
-                    <th style="text-align: center">
+                    <th style="text-align: center; width: 100px;">
                         <div class="d-flex justify-content-center">
                             <div class="form-check form-switch">
-                                <input @change="massiveDelete()" class="form-check-input" type="checkbox" id="massiveDeleteCheckBox">
+                                <input style="margin-bottom: 5px;" @click="massiveDelete()" class="form-check-input" type="checkbox" id="massiveDeleteCheckBox">
                             </div>
-                            <i v-if="!mass_delete" class="bi bi-x-square"></i>
-                            <a @click="confirmMessage()" style="color: red;" v-else><i class="bi bi-x-square"></i></a>
+                            <button class="btn btn-outline-dark deleteButton disabled" v-if="!mass_delete"><i class="bi bi-x-lg"></i></button>
+                            <button class="btn btn-outline-danger deleteButton" @click="confirmMessage()" v-else><i class="bi bi-x-lg"></i></button>
                         </div>
                     </th>
                 </tr>
             </thead>
-            <!-- @foreach ($test as $person) -->
             <tbody>
                 <tr v-for="student,i in filteredStudents" :key="i">
                     <td>{{ student.id }}</td>
                     <td>{{ student.name }}</td>
                     <td>{{ student.last_name }}</td>
+                    <td style="width: 50px;"><button type="button" class="btn btn-secondary" @click="mapStudent()"><i class="bi bi-person-vcard-fill"></i></button></td>
                     <td class="actions">
                         <button type="submit" class="btn btn-primary" @click="showModal(student.id), selectStudent(student)"><i class="bi bi-pencil-square"></i> Editar</button>
                     </td>
                     <td class="actions" v-if="!mass_delete">
-                        <button type="submit" class="btn btn-outline-danger" @click="deleteStudent(student.id)" onclick="alert('deseas eliminarlo al estudiante')"><i class="bi bi-trash"></i> Borrar</button>
+                        <button type="submit" class="btn btn-outline-danger" @click="confirmMessage(student.id)"><i class="bi bi-trash"></i> Borrar</button>
                     </td>
                     <td class="actions" v-else>
                         <div>
                             <input @click="deleteSelectedStudents(student)" style="
                             width: 25px; 
-                            height: 25px;" class="form-check-input" type="checkbox" id="checkboxDelete" value="" aria-label="...">
+                            height: 25px;" class="form-check-input" type="checkbox" :id="`check${i}`" :checked="unselectCheck(student.id)" />
                         </div>
                     </td>
                 </tr>
             </tbody>
-            <!-- @endforeach -->
         </table>
-        <div class="d-flex justify-content-between">
-            <div>
-                <button type="button" class="btn btn-secondary" @click="mapStudent()"><i class="bi bi-person-vcard-fill"></i> map students</button>
-            </div>
+        <div class="justify-content-end">
             <Pagination :current="paginate.current_page" :total="paginate.total" :per-page="paginate.per_page" @page-changed="getStudents"></Pagination>
         </div>
     </div>
@@ -102,7 +98,6 @@
 </template>
 
 <!-- Scripts -->
-
 <script>
 import Pagination from 'vue2-laravel-pagination'
 export default {
@@ -111,12 +106,12 @@ export default {
     },
     data() {
         return {
+            checked: false,
             checkedStudents: [],
-            mass_delete: null,
+            mass_delete: false,
             full_name: [],
             time: '',
             myModal: null,
-            error: 0,
             action: true,
             student_id: '',
             search: '',
@@ -150,33 +145,50 @@ export default {
             axios
                 .post('/crud', this.input_student)
                 .then(response => {
-                    console.log(response)
-                    this.cleanInputs()
-                    this.myModal.hide()
-                    this.getStudents(1)
-                })
-                .catch(error => {
-                    console.log(error.response)
-                    this.error = error.response.status
-                    setTimeout(() => {
-                        this.error = 0
-                    }, 3000);
+                    if (response.data.success) {
+                        console.log(response.data.success)
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.data.success,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.cleanInputs()
+                        this.myModal.hide()
+                        this.getStudents(1)
+                    } else {
+                        console.log(response.data.error)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.data.error,
+                        })
+                    }
                 })
         },
         editStudent() {
-            axios.put(`/crud/${this.student_id}`, this.input_student)
+            axios
+                .put(`/crud/${this.student_id}`, this.input_student)
                 .then(response => {
-                    console.log(response)
-                    this.cleanInputs()
-                    this.myModal.hide()
-                    this.getStudents(1)
-                })
-                .catch(error => {
-                    console.log(error.response)
-                    this.error = error.response.status
-                    setTimeout(() => {
-                        this.error = 0
-                    }, 3000);
+                    if (response.data.success) {
+                        // console.log(response.data.success)
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.data.success,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.cleanInputs()
+                        this.myModal.hide()
+                        this.getStudents()
+                    } else {
+                        // console.log(response.data.error)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.data.error,
+                        })
+                    }
                 })
         },
         deleteStudent(student_id) {
@@ -197,6 +209,7 @@ export default {
             }
         },
         massiveDelete() {
+            this.checkedStudents = []
             this.mass_delete = document.getElementById('massiveDeleteCheckBox').checked
         },
         deleteSelectedStudents(student) {
@@ -204,33 +217,77 @@ export default {
                 this.checkedStudents.push(student.id) :
                 this.checkedStudents.splice(this.checkedStudents.indexOf(student.id), 1)
         },
-        confirmMessage() {
-            Swal.fire({
-                title: 'Estas seguro?',
-                text: "Los estudiantes se eliminaran permanentemente",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.deleteAllChecked()
+        confirmMessage(student_id) {
+            if (this.mass_delete == true) {
+                if (!this.checkedStudents.length) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'No tienes a un estudiante seleccionado!',
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Estas seguro?',
+                        text: "Los estudiantes se eliminaran permanentemente",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.deleteAllChecked()
+                            this.checkedStudents = []
+                        }
+                    })
                 }
-            })
+            } else {
+                Swal.fire({
+                    title: 'Estas seguro?',
+                    text: "El estudiantes se eliminaran permanentemente",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.deleteStudent(student_id)
+                    }
+                })
+            }
+        },
+        unselectCheck(id) {
+            if (this.checkedStudents.includes(id)) {
+                return true
+            } else {
+                return false
+            }
         },
         deleteAllChecked() {
-            axios.delete('/delete-selected-students/',{params:
-                this.checkedStudents
-            })
-                .then(response => {
-                    console.log(response)
-                    this.cleanInputs()
-                    this.getStudents(1)
+            axios.delete('/delete-selected-students/', {
+                    params: this.checkedStudents
                 })
-                .catch(error => {
-                    console.error(error);
-                    this.getStudents(1)
+                .then(response => {
+                    if (response.data.success) {
+                        console.log(response.data.success)
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.data.success,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.cleanInputs()
+                        this.getStudents(1)
+                    } else {
+                        console.log(response.data.error)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.data.error,
+                        })
+                        this.getStudents(1)
+                    }
                 })
         },
         mapStudent() {
@@ -255,7 +312,7 @@ export default {
                 this.time = moment().format('HH:mm:ss')
             }, 1000)
 
-        }
+        },
     },
     computed: {
         filteredStudents() {
@@ -264,7 +321,9 @@ export default {
                 el.last_name.toLowerCase().includes(this.search.toLowerCase()));
         },
     },
-    watch: {},
+    watch: {
+        checkedStudents(newValue, oldValue) {}
+    },
     mounted() {
         this.clock()
         this.getStudents()
@@ -273,7 +332,6 @@ export default {
 </script>
 
 <!-- Style -->
-
 <style>
 .form-check-input:checked {
     background-color: #dc3545;

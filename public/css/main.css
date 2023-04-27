@@ -41,11 +41,14 @@ h1 {
 }
 
 .nem {
-  width: 250px;
+  width: 200px;
 }
 
-.act {
-  width: 100px;
+.deleteButton {
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .filtro {
