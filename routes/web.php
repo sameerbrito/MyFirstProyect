@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MyFirstController;
-use App\Models\MyFirstModel;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\ClassroomController;
+use App\Models\Student;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,18 +25,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('get-all-students', [MyFirstController::class, 'getAllStudents']);
-Route::delete('delete-selected-students', [MyFirstController::class, 'deleteSelectedStudents']);
-Route::resource('crud', MyFirstController::class);
+Route::get('get-all-students', [StudentController::class, 'getAllStudents']);
 
-// Route::controller(MyFirstController::class)->group(function(){
-//     Route::get('home', 'index');
-//     Route::get('create', 'create');
-//     Route::get('edit', 'edit');
-// });
+Route::get('get-teacher-in-classroom', [ClassroomController::class, 'getTeacheInClassroom']);
+
+Route::delete('delete-selected-students', [StudentController::class, 'deleteSelectedStudents']);
+
+Route::get('/cards', [StudentController::class, 'cards']);
+
+Route::resource('crud', StudentController::class);
+
+Route::resource('teacher', TeacherController::class);
+
+Route::resource('classroom', ClassroomController::class);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

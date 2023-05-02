@@ -26,6 +26,7 @@ window.moment = require('moment');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('login-component', require('./components/Login.vue').default);
 Vue.component('list-component', require('./components/List.vue').default);
+Vue.component('cards-component', require('./components/Cards.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

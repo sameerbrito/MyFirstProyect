@@ -24,6 +24,20 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- <div class="row mb-4">
+                            <div class="col">
+                                <div class="form-outline">
+                                    <label class="form-label" for="Telefono">Telefono</label>
+                                    <input class="form-control" type="phone">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-outline">
+                                    <label class="form-label" for="Birthdate">Fecha de Nacimiento</label>
+                                    <input class="form-control" type="date">
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="beforeClose">Close</button>
@@ -35,7 +49,7 @@
         </div>
     </div>
 
-    <!--Lista de estudiantes -->
+    <!-- Lista de estudiantes -->
     <div class="contenedor">
         <div class="d-flex justify-content-between">
             <button type="button" class="btn btn-success" @click="showModal()"><i class="bi bi-plus-square"></i>
@@ -155,7 +169,7 @@ export default {
                         })
                         this.cleanInputs()
                         this.myModal.hide()
-                        this.getStudents(1)
+                        this.getStudents(this.paginate.current_page)
                     } else {
                         console.log(response.data.error)
                         Swal.fire({
@@ -180,7 +194,7 @@ export default {
                         })
                         this.cleanInputs()
                         this.myModal.hide()
-                        this.getStudents()
+                        this.getStudents(this.paginate.current_page)
                     } else {
                         // console.log(response.data.error)
                         Swal.fire({
@@ -196,11 +210,11 @@ export default {
                 .then(response => {
                     console.log(response)
                     this.cleanInputs()
-                    this.getStudents(1)
+                    this.getStudents(this.paginate.current_page)
                 })
                 .catch(error => {
                     console.error(error);
-                    this.getStudents(1)
+                    this.getStudents(this.paginate.current_page)
                 })
         },
         selectStudent(student) {
@@ -223,7 +237,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'No tienes a un estudiante seleccionado!',
+                        text: 'No tienes estudiantes seleccionado!',
                     })
                 } else {
                     Swal.fire({
@@ -278,7 +292,7 @@ export default {
                             timer: 1500
                         })
                         this.cleanInputs()
-                        this.getStudents(1)
+                        this.getStudents()
                     } else {
                         console.log(response.data.error)
                         Swal.fire({
@@ -286,7 +300,7 @@ export default {
                             title: 'Oops...',
                             text: response.data.error,
                         })
-                        this.getStudents(1)
+                        this.getStudents()
                     }
                 })
         },
